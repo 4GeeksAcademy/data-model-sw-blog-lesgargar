@@ -13,6 +13,11 @@ class User(db.Model):
     password: Mapped[str] = mapped_column(nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
 
+    favorite_planets: Mapped[List["FavoritePlanet"]
+                             ] = relationship(back_populates="user")
+    favorite_characters: Mapped[List["FavoriteCharacter"]] = relationship(
+        back_populates="user")
+
     def serialize(self):
         return {
             "id": self.id,
@@ -42,7 +47,7 @@ class Character(db.Model):
     origin_planet: Mapped["Planet"] = relationship(back_populates="characters")
 
 
-class Favorite_planet(db.model):
+class FavoritePlanet(db.model):
     __tablename__ = "favorite_planets"
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey(
@@ -56,7 +61,7 @@ class Favorite_planet(db.model):
     planet: Mapped["Planet"] = relationship()  # relacion del planet
 
 
-class Favorite_charachters(db.model):
+class FavoriteCharacter(db.model):
     __tablename__ = "favorite_characters"
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(
